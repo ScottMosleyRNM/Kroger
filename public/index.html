@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kroger Linker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">K</span>
+          <div>
+            <div class="logo-title">Kroger Linker</div>
+            <div class="logo-sub">Ingredients → Products</div>
+          </div>
+        </div>
+        <div class="header-right">
+          <div id="location-display" class="location-pill" style="display:none"></div>
+          <div id="progress-counter" class="progress-counter" style="display:none">
+            <span id="linked-count">0</span>/<span id="total-count">0</span>
+            <span class="progress-label">linked</span>
+          </div>
+        </div>
+      </div>
+      <div id="progress-bar-wrap" style="display:none">
+        <div id="progress-bar"></div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Settings Panel -->
+      <div id="settings-panel" class="settings-panel">
+        <div class="settings-title">Store Location <span class="optional-tag">optional</span></div>
+        <div class="settings-row">
+          <input id="zip-input" class="input" type="text" placeholder="Enter ZIP code to find your store" maxlength="5" />
+          <button id="find-store-btn" class="btn btn-secondary">Find Store</button>
+        </div>
+        <div id="store-results" class="store-results" style="display:none"></div>
+      </div>
+
+      <!-- Toolbar -->
+      <div id="toolbar" class="toolbar" style="display:none">
+        <input id="search-input" class="input search-input" type="text" placeholder="Filter ingredients…" />
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="unlinked">Unlinked</button>
+          <button class="filter-tab" data-filter="linked">Linked</button>
+        </div>
+      </div>
+
+      <!-- States -->
+      <div id="state-loading" class="state-screen">
+        <div class="spinner"></div>
+        <div class="state-text">Loading ingredients from Notion…</div>
+      </div>
+
+      <div id="state-error" class="state-screen" style="display:none">
+        <div class="state-icon">⚠</div>
+        <div class="state-text" id="error-message">Something went wrong.</div>
+        <button class="btn btn-primary" onclick="loadIngredients()">Retry</button>
+      </div>
+
+      <div id="state-empty" class="state-screen" style="display:none">
+        <div class="state-icon">∅</div>
+        <div class="state-text">No ingredients match this filter.</div>
+      </div>
+
+      <!-- Ingredient List -->
+      <div id="ingredient-list"></div>
+    </main>
+  </div>
+
+  <!-- Product search row template -->
+  <template id="ingredient-template">
+    <div class="ingredient-row" data-id="">
+      <div class="ingredient-main">
+        <div class="ingredient-thumb">
+          <img class="thumb-img" src="" alt="" style="display:none" />
+          <span class="thumb-placeholder">?</span>
+        </div>
+        <div class="ingredient-info">
+          <div class="ingredient-name"></div>
+          <div class="ingredient-linked-name"></div>
+        </div>
+        <div class="ingredient-actions">
+          <span class="saved-badge" style="display:none">✓ Saved</span>
+          <span class="saving-badge" style="display:none">Saving…</span>
+          <button class="btn btn-link save-btn" style="display:none">Link to Notion</button>
+          <button class="btn btn-search search-btn">Search</button>
+        </div>
+      </div>
+      <div class="product-results" style="display:none">
+        <div class="product-grid"></div>
+        <div class="no-results" style="display:none">No products found — try a different search term.</div>
+      </div>
+      <div class="ingredient-error" style="display:none"></div>
+    </div>
+  </template>
+
+  <!-- Product card template -->
+  <template id="product-template">
+    <button class="product-card">
+      <div class="product-img-wrap">
+        <img class="product-img" src="" alt="" />
+        <span class="product-img-placeholder">🛒</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name"></div>
+        <div class="product-meta"></div>
+        <div class="product-price"></div>
+      </div>
+      <div class="product-check">✓</div>
+    </button>
+  </template>
+
+  <script src="/src/app.js"></script>
+</body>
+</html>
