@@ -44,7 +44,7 @@ router.get("/search", async (req, res) => {
 
     const params = new URLSearchParams({
       "filter.term": q,
-      "filter.limit": "8",
+      "filter.limit": "24",
     });
     if (locationId) params.set("filter.locationId", locationId);
 
